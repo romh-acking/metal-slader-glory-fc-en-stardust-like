@@ -51,12 +51,12 @@ db $ea
 //Ch7: Final blow music change
 //==============================
 org $3ab2 // 0x43ab2
-db $B8
-db $01,$20
-db $82
-db $02,$7D,$06
-db $B6
-db $4E,$16,$0A
+//db $B8
+//db $01,$20
+//db $82
+//db $02,$7D,$06
+//db $B6
+//db $4E,$16,$0A
 
 //==============================
 //BANK 18
@@ -69,10 +69,10 @@ bank 18
 //==============================
 //Bank ID 1
 org $171A // 0x4971A
-db $80
+//db $80
 //Bank ID 2
 org $171D // 0x4971D
-db $80
+//db $80
 //==============================
 //Ch 2: Yayoi kickout music end wait removal (Script Engine)
 //(Childless)
@@ -170,9 +170,9 @@ db $b2
 //(Childless)
 //==============================
 org $12C3 // 0x512C3
-db $FD
+//db $FD
 org $12D4 // 0x512D4s
-db $FD
+//db $FD
 
 //==============================
 //BANK 29
@@ -243,7 +243,7 @@ JSR ChoiceNumberFix
 //Password shadow fix A
 //==============================
 org $2B71 // 0x7AB71
-JSR PasswordShadowFix
+//JSR PasswordShadowFix
 //==============================
 //Remove autolinebreaking
 //(Top dialogue box)
@@ -283,12 +283,12 @@ JMP TextSpeedReport
 //Emergency countdown fix
 //==============================
 org $30EC // 0x7B0EC
-db $9F
+db $8F
 //==============================
 //Emergency countdown period fix
 //==============================
 org $312E // 0x7B12E
-db $14
+db $56
 //==============================
 //Portrait shadows fix A
 //==============================
@@ -343,10 +343,13 @@ db $81,$81
 org $3AAD //0x7BAAD
 db $03
 
-//Silencing puncation messes up the mouth movments
-//of certain lines with one word with the mouth patches
-//we've done
 // Don't silence sweat emojis, just like the original JP version.
+
+// Silence puncuation
+org $7BBAC // ? and !
+db $03,$03
+
+
 
 //==============================
 //Scrolling text speed C (when linebreaks are used)
@@ -843,62 +846,6 @@ bank 30
 //==============================
 org $3E50 ; base $9E40
 PasswordShadowFix:
-LDA $18
-STY $FD
-ADC $FD
-CMP #$A1
-BNE ExitShadowFix
-LDA $19
-CMP #$AE
-BNE ExitShadowFix
-//Backups
-STY $FE
-STX $FF
-//???
-LDA #$00
-STA $A8
-LDA #$2F
-STA $A7
-//Vertical line to buffer
-LDA #$04
-STA $0300
-LDA #$0B
-STA $0301
-LDA #$20
-STA $0302
-LDA #$7E
-STA $0303
-LDX #$00
-LDA #$FF
-Loop1:
-STA $0304,x
-INX
-CPX #$0B
-BNE Loop1
-//Horizontal line to buffer
-LDA #$00
-STA $030F
-LDA #$1C
-STA $0310
-LDA #$21
-STA $0311
-LDA #$A3
-STA $0312
-LDX #$00
-LDA #$FF
-Loop2:
-STA $0313,x
-INX
-CPX #$20
-BNE Loop2
-//Restore Y, X and A
-LDX $FF
-LDY $FE
-ExitShadowFix:
-LDA ($18),y
-STA ($1A),y
-DEY
-RTS
 
 //==============================
 //Scrolling text speed B
